@@ -1,5 +1,7 @@
 /**
-    FELIPE TIAGO DE CARLI
+    NOME: FELIPE TIAGO DE CARLI
+    N USP: 10525686
+    GITHUB: https://github.com/felipdc
      _   _ ___________
     | | | /  ___| ___ \
     | | | \ `--.| |_/ /
@@ -13,6 +15,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+typedef enum {false,
+	true} bool;
 
 typedef enum {empty,
 	filled} Boardst;
@@ -38,9 +42,9 @@ struct game {
     char *board[16];	/** game field **/
     Boardst boardStats[16]; /** wheter the position on the board is empty or filled **/
     Piecest pieceStats[16]; /** wheter the number is already used or not **/
-    Whoplays player;
-    size_t next_piece;
-}; typedef struct game gm;
+    Whoplays player; /** Whose turn it is to play **/
+    size_t next_piece; /** Next piece to be put in the board by the following player **/
+}; typedef struct game gm;	
 
 
 size_t hexchar_touint (char moveRead) {
@@ -82,14 +86,92 @@ void init_board (gm *newGame) {
     newGame->player = player1; /** first player will be player1 by default **/
 }
 
+
+/**
+	winning coords:
+		0 1 2 3 => lines
+		4 5 6 7
+		8 9 a b
+		c d e f
+		0 4 8 c => columns
+		1 5 9 d
+		2 6 a e
+		3 7 b f
+		0 5 a f => first diagonal
+		3 6 9 c => second diagonal
+**/
+
+
+bool checkBoard (gm *newGame) {
+	for (int j = 0; j < 15; j += 4){ /** iterate throught board position **/
+		for (int i = 0; i < 4; ++i) { /** iterate throught string **/
+			if (newGame->boardStats[0+j] == empty) continue; /** Check if one of the positions is still empty **/
+			else if (newGame->board[0+j][i] == newGame->board[1+j][i] && newGame->board[0+j][i] == 
+				newGame->board[2+j][i] && newGame->board[1+j][i] == newGame->board[3+j][i]) {
+					return true;
+			}
+		}
+	}
+	for (int j = 0; j < 4; ++j){
+		for (int i = 0; i < 4; ++i) {
+			if (newGame->boardStats[0+j] == empty) continue;
+			else if (newGame->board[0+j][i] == newGame->board[4+j][i] && newGame->board[0+j][i] == 
+				newGame->board[8+j][i] && newGame->board[4+j][i] == newGame->board[12+j][i]) {
+					printf("digit %d of column %d is equal\n", i, j);
+					return true;
+			}
+		}
+	}
+	for (int i = 0; i < 4; ++i) {
+		if (newGame->boardStats[0] == empty) continue;
+		else if (newGame->board[0][i] == newGame->board[5][i] && newGame->board[0][i] ==
+			newGame->board[10][i] && newGame->board[5][i] == newGame->board[15][i]) {
+				printf("digit %d in the first diagonal is equal\n", i);
+				return true;
+		}
+	}
+	for (int i = 0; i < 4; ++i) {
+		if (newGame->boardStats[3] == empty) continue;
+		else if (newGame->board[3][i] == newGame->board[6][i] && newGame->board[3][i] ==
+			newGame->board[9][i] && newGame->board[6][i] == newGame->board[12][i]) {
+				printf("digit %d in the second diagonal is equal\n", i);
+				return true;
+		}
+	}
+	return false;
+}
+
+
 void play1 (gm *newGame) {
-	char read_move, read_next_piece = ' ';
-	size_t move = 0;
-	scanf ("%c %c\n", &read_move, &read_next_piece);
+	char read_move, read_next_piece = ' '; /** Variables to be read by the user **/
+	size_t move, next_p = 0;
+	scanf ("%c", &read_move);
+	getchar(); /** Prevents \n to be copied to the next scanf **/
+	scanf ("%c", &read_next_piece);
+	getchar();
 	move = hexchar_touint (read_move);
+	next_p = hexchar_touint (read_next_piece);
+	while (newGame->boardStats[move] == filled) {
+		printf ("Board position is already filled. Try another position. \n");
+		scanf ("%c", &read_move);
+		getchar();
+		move = hexchar_touint (read_move);
+	}
+	while (newGame->pieceStats[next_p] == used) {
+		printf ("Piece %lu is already in use. Try another piece. \n", next_p);
+		scanf ("%c", &read_next_piece);
+		getchar();
+		next_p = hexchar_touint (read_next_piece);
+	}
 	newGame->board[move] = binaryoptions[newGame->next_piece];
+	/** Check if the move is a winning move **/
+	if (checkBoard (newGame)) {
+		printf("Game over\n");
+		return;
+	}
 	newGame->boardStats[move] = filled;
-	newGame->next_piece = hexchar_touint (read_next_piece);
+	newGame->next_piece = next_p;
+	newGame->pieceStats[next_p] = used;
 }
 
 
@@ -108,6 +190,8 @@ int main (int argc, char *argv[]) {
     init_board (newGame); /** initialize board and fill all positions with null values **/
     print_board (newGame);
     firstPlay (newGame);
+    play1 (newGame);
+    print_board (newGame);
     play1 (newGame);
     print_board (newGame);
     free (newGame);
