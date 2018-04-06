@@ -6,7 +6,7 @@
 #include <string.h>
 
 
-typedef enum {player1,
+typedef enum {player1 = 1,
 	player2} Whoplays;
 
 typedef enum {false,
@@ -35,6 +35,9 @@ struct game {
 size_t hexchar_touint (char moveRead);
 void play1 (gm *newGame);
 void firstPlay (gm *newGame);
+void updateGame (size_t move, size_t next_p, gm *newGame);
+size_t readFromUser ();
+bool validInput (char user_input);
 
 
 #endif 
