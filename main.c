@@ -27,8 +27,8 @@ size_t hexchar_touint (char moveRead) {
 
 int main (int argc, char *argv[]) {
     gm *newGame;
-    newGame = malloc (sizeof(gm)); /** allocating memory for newGame struct **/
-    init_board (newGame); /** initialize board and fill all positions with null values **/
+    newGame = malloc (sizeof(gm));
+    init_board (newGame); 
     print_board (newGame);
     firstPlay (newGame);
     play1(newGame);

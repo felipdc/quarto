@@ -7,7 +7,7 @@
 /**
  *	Range of options is from 0 to F, so it`s binary values can be
  *	easily stored in a small char pointer pointer
-*/
+ */
 char *binaryoptions[] = {"0000", "0001", "0010", "0011", "0100",
                                 "0101", "0110", "0111", "1000", "1001",
                                 "1010", "1011", "1100", "1101", "1110",
@@ -35,7 +35,7 @@ size_t readFromUser () {
 	return (hexchar_touint (read_from_user));
 }
 
-
+/** Default play function */
 void play1 (gm *newGame) {
 	printf("Player %d: \n" 
 			"Choose a position for the piece %04lx\n", newGame->player,

@@ -34,29 +34,29 @@ void init_board (gm *newGame) {
         newGame->boardStats[i] = empty;
         newGame->pieceStats[i] = unused;
     }
-    newGame->player = player1; /** first player will be player1 by default **/
+    newGame->player = player1; /** first player will be player1 by default */
 }
 
 
 /**
-	winning coords:
-		0 1 2 3 => lines
-		4 5 6 7
-		8 9 a b
-		c d e f
-		0 4 8 c => columns
-		1 5 9 d
-		2 6 a e
-		3 7 b f
-		0 5 a f => first diagonal
-		3 6 9 c => second diagonal
-**/
+ *		winning coords:
+ *		0 1 2 3 => lines
+ *		4 5 6 7
+ *		8 9 a b
+ *		c d e f
+ *		0 4 8 c => columns
+ *		1 5 9 d
+ *		2 6 a e
+ *		3 7 b f
+ *		0 5 a f => first diagonal
+ *		3 6 9 c => second diagonal
+ */
 
 
 bool checkBoard (gm *newGame) {
-	for (int j = 0; j < 15; j += 4){ /** iterate throught board position **/
-		for (int i = 0; i < 4; ++i) { /** iterate throught string **/
-			if (newGame->boardStats[0+j] == empty) continue; /** Check if one of the positions is still empty **/
+	for (int j = 0; j < 15; j += 4){ /** iterate throught board position */
+		for (int i = 0; i < 4; ++i) { /** iterate throught string */
+			if (newGame->boardStats[0+j] == empty) continue; /** Check if one of the positions is still empty */
 			else if (newGame->board[0+j][i] == newGame->board[1+j][i] && newGame->board[0+j][i] == 
 				newGame->board[2+j][i] && newGame->board[1+j][i] == newGame->board[3+j][i]) {
 					printf("digit %d of line %d is equal\n", i, j);

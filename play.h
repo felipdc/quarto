@@ -17,11 +17,7 @@ typedef enum {empty,
 
 typedef enum {unused,
 	used} Piecest;
-
-/**
-    Range of options is from 0 to F, so it`s binary values can be
-     easily stored in a small char pointer pointer
-**/
+    
 
 struct game {
     char *board[16];	/** game field **/	
@@ -32,12 +28,12 @@ struct game {
 }; typedef struct game gm;	
 
 
-size_t hexchar_touint (char moveRead);
-void play1 (gm *newGame);
-void firstPlay (gm *newGame);
-void updateGame (size_t move, size_t next_p, gm *newGame);
-size_t readFromUser ();
-bool validInput (char user_input);
+size_t hexchar_touint (char moveRead); /** Convert input char to unsigned int */
+void play1 (gm *newGame); /** Default main play function */
+void firstPlay (gm *newGame); /** Executed only on first move */
+void updateGame (size_t move, size_t next_p, gm *newGame); /** Update board as soon as moves are considered valid */
+size_t readFromUser (); /** Read input from user and return size_t value */
+bool validInput (char user_input); /** Check if user input is a valid input */
 
 
 #endif 
