@@ -1,3 +1,17 @@
+/**
+ *   NOME: FELIPE TIAGO DE CARLI
+ *   N USP: 10525686
+ *   GITHUB: https://github.com/felipdc
+ *    _   _ ___________
+ *   | | | /  ___| ___ \
+ *   | | | \ `--.| |_/ /
+ *   | | | |`--. \  __/
+ *   | |_| /\__/ / |
+ *    \___/\____/\_|
+ *
+ *********************************************   
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -56,38 +70,43 @@ void init_board (gm *newGame) {
 bool checkBoard (gm *newGame) {
 	for (int j = 0; j < 15; j += 4){ /** iterate throught board position */
 		for (int i = 0; i < 4; ++i) { /** iterate throught string */
-			if (newGame->boardStats[0+j] == empty) continue; /** Check if one of the positions is still empty */
-			else if (newGame->board[0+j][i] == newGame->board[1+j][i] && newGame->board[0+j][i] == 
-				newGame->board[2+j][i] && newGame->board[1+j][i] == newGame->board[3+j][i]) {
-					printf("digit %d of line %d is equal\n", i, j);
-					return true;
+			if (newGame->boardStats[0+j] == empty) 
+				continue; /** Check if one of the positions is still empty */
+			else if (newGame->board[0+j][i] == newGame->board[1+j][i] 
+					&& newGame->board[0+j][i] == newGame->board[2+j][i] 
+					&& newGame->board[1+j][i] == newGame->board[3+j][i]) {
+						printf("digit %d of line %d is equal\n", i, j);
+						return true;
 			}
 		}
 	}
 	for (int j = 0; j < 4; ++j){
 		for (int i = 0; i < 4; ++i) {
 			if (newGame->boardStats[0+j] == empty) continue;
-			else if (newGame->board[0+j][i] == newGame->board[4+j][i] && newGame->board[0+j][i] == 
-				newGame->board[8+j][i] && newGame->board[4+j][i] == newGame->board[12+j][i]) {
-					printf("digit %d of column %d is equal\n", i, j);
-					return true;
+			else if (newGame->board[0+j][i] == newGame->board[4+j][i] 
+					&& newGame->board[0+j][i] == newGame->board[8+j][i] 
+					&& newGame->board[4+j][i] == newGame->board[12+j][i]) {
+						printf("digit %d of column %d is equal\n", i, j);
+						return true;
 			}
 		}
 	}
 	for (int i = 0; i < 4; ++i) {
 		if (newGame->boardStats[0] == empty) continue;
-		else if (newGame->board[0][i] == newGame->board[5][i] && newGame->board[0][i] ==
-			newGame->board[10][i] && newGame->board[5][i] == newGame->board[15][i]) {
-				printf("digit %d in the first diagonal is equal\n", i);
-				return true;
+		else if (newGame->board[0][i] == newGame->board[5][i] 
+				&& newGame->board[0][i] == newGame->board[10][i] 
+				&& newGame->board[5][i] == newGame->board[15][i]) {
+					printf("digit %d in the first diagonal is equal\n", i);
+					return true;
 		}
 	}
 	for (int i = 0; i < 4; ++i) {
 		if (newGame->boardStats[3] == empty) continue;
-		else if (newGame->board[3][i] == newGame->board[6][i] && newGame->board[3][i] ==
-			newGame->board[9][i] && newGame->board[6][i] == newGame->board[12][i]) {
-				printf("digit %d in the second diagonal is equal\n", i);
-				return true;
+		else if (newGame->board[3][i] == newGame->board[6][i] 
+				&& newGame->board[3][i] == newGame->board[9][i] 
+				&& newGame->board[6][i] == newGame->board[12][i]) {
+					printf("digit %d in the second diagonal is equal\n", i);
+					return true;
 		}
 	}
 	return false;

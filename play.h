@@ -1,3 +1,17 @@
+/**
+ *   NOME: FELIPE TIAGO DE CARLI
+ *   N USP: 10525686
+ *   GITHUB: https://github.com/felipdc
+ *    _   _ ___________
+ *   | | | /  ___| ___ \
+ *   | | | \ `--.| |_/ /
+ *   | | | |`--. \  __/
+ *   | |_| /\__/ / |
+ *    \___/\____/\_|
+ *
+ *********************************************   
+ */
+
 #ifndef PLAY_H_
 #define PLAY_H_
 
@@ -20,11 +34,11 @@ typedef enum {unused,
     
 
 struct game {
-    char *board[16];	/** game field **/	
-    Boardst boardStats[16]; /** wheter the position on the board is empty or filled **/
-    Piecest pieceStats[16]; /** wheter the number is already used or not **/
-    Whoplays player; /** Whose turn it is to play **/
-    size_t next_piece; /** Next piece to be put in the board by the following player **/
+    char *board[16];	/** Game field */	
+    Boardst boardStats[16]; /** Wheter the position on the board is empty or filled */
+    Piecest pieceStats[16]; /** Wheter the number is already used or not */
+    Whoplays player; /** Whose turn it is to play */
+    size_t next_piece; /** Next piece to be put in the board by the following player */
 }; typedef struct game gm;	
 
 

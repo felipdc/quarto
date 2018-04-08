@@ -1,15 +1,16 @@
 /**
-    NOME: FELIPE TIAGO DE CARLI
-    N USP: 10525686
-    GITHUB: https://github.com/felipdc
-     _   _ ___________
-    | | | /  ___| ___ \
-    | | | \ `--.| |_/ /
-    | | | |`--. \  __/
-    | |_| /\__/ / |
-     \___/\____/\_|
-
-**/
+ *   NOME: FELIPE TIAGO DE CARLI
+ *   N USP: 10525686
+ *   GITHUB: https://github.com/felipdc
+ *    _   _ ___________
+ *   | | | /  ___| ___ \
+ *   | | | \ `--.| |_/ /
+ *   | | | |`--. \  __/
+ *   | |_| /\__/ / |
+ *    \___/\____/\_|
+ *
+ *********************************************   
+ */
 
 #include <stdio.h>
 #include <stdlib.h>

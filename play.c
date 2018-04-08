@@ -1,3 +1,17 @@
+/**
+ *   NOME: FELIPE TIAGO DE CARLI
+ *   N USP: 10525686
+ *   GITHUB: https://github.com/felipdc
+ *    _   _ ___________
+ *   | | | /  ___| ___ \
+ *   | | | \ `--.| |_/ /
+ *   | | | |`--. \  __/
+ *   | |_| /\__/ / |
+ *    \___/\____/\_|
+ *
+ *********************************************   
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,11 +28,11 @@ char *binaryoptions[] = {"0000", "0001", "0010", "0011", "0100",
                                 "1111"};
 
 
-/** Check if the user input is a valid input */
+/** Check if the user input is a valid input by comparing it to the ASCII table */
 bool validInput (char user_input) {
-	if (user_input > 64 && user_input < 71) return true;
-	if (user_input > 96 && user_input < 103) return true;
-	if (user_input > 47 && user_input < 58) return true;
+	if (user_input > 64 && user_input < 71) return true;  /** 'a' to 'f' in ASCII table */
+	if (user_input > 96 && user_input < 103) return true;	/** 'A' to 'F' in ASCII table */
+	if (user_input > 47 && user_input < 58) return true;	/** '0' to '9' in ASCII table */
 	return false;
 }
 
@@ -65,7 +79,7 @@ void updateGame (size_t move, size_t next_p, gm *newGame) {
 	if (newGame->player == player1) newGame->player = player2;
 	else newGame->player = player1;
 	print_board(newGame);
-	/** Check if the move is a winning move **/
+	/** Check if the move is a winning move */
 	if (checkBoard (newGame)) {
 		printf("Game over! \nPlayer %d is the winner!\n", newGame->player + 1);
 		return;
