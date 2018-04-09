@@ -23,7 +23,7 @@
 
 size_t hexchar_touint (char moveRead) {
     char *ptr; /** Next character in moveRead after the numerical value */
-    long ret = strtol (&moveRead, &ptr, 16);  /** Converts initial part of moveRead to a long int of base 16 */
+    long ret = strtol (&moveRead, &ptr, 16);  /** Converts initial part of moveRead to a long initialt of base 16 */
     return (size_t)ret; /** Explicit cast not necessary but will be kept here */
 }
 
@@ -40,7 +40,7 @@ bool set_flags (int argc, char *argv[]) {
 	}
 	if (argc > 1 && strcmp (argv[1], "-ai") == 0) {
 		g_flags[PLAYER_VS_AI] = true;
-		if (argc == 3 && strcmp (argv[2], "-aib")) {
+		if (argc == 3 && strcmp (argv[2], "-aib") == 0) {
 			g_flags[AI_BEGINS] = true;	
 
 		}
