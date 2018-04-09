@@ -17,6 +17,8 @@
 #include <string.h>
 #include "play.h"
 #include "board.h"
+#include "ai.h"
+#include "options.h"
 
 
 size_t hexchar_touint (char moveRead) {
@@ -26,13 +28,44 @@ size_t hexchar_touint (char moveRead) {
 }
 
 
+bool set_flags (int argc, char *argv[]) {
+	// Set all flags to false
+	for (int i = 0; i < 16; ++i) {
+		g_flags[i] = false;	
+	}
+	if (argc > 3) {
+		printf ("Invalid options. See -help for a "
+				"list of avaliable commands");
+		return false;
+	}
+	if (argc > 1 && strcmp (argv[1], "-ai") == 0) {
+		g_flags[PLAYER_VS_AI] = true;
+		if (argc == 3 && strcmp (argv[2], "-aib")) {
+			g_flags[AI_BEGINS] = true;	
+
+		}
+		return true;
+	}
+}
+
+
 int main (int argc, char *argv[]) {
     gm *newGame;
     newGame = malloc (sizeof(gm));
-    init_board (newGame); 
+    set_flags (argc, argv);
+    init_board (newGame);
     print_board (newGame);
-    firstPlay (newGame);
-    //play1(newGame);
+    if (g_flags[PLAYER_VS_AI] == true) {
+    	if (g_flags[AI_BEGINS] == true) {
+    		g_first_play = true;
+    		moveUsingHeuristic (newGame);
+    	}else {
+    		firstPlay (newGame);
+    	}
+    }else {
+    	firstPlay (newGame);
+    	play1 (newGame);
+    }
     free (newGame);
     return 0;
 }

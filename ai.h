@@ -29,9 +29,12 @@ struct move {
 	size_t move, next_piece;
 };
 
+bool g_first_play;
+
 int chooseAiNextPiece (gm *newGame);
 int chooseAiMove (gm *newGame);
 void moveUsingHeuristic(gm *newGame);
+int moveUsingMinimax(gm *newGame);
 int minimax (bool is_max, gm *game_node, struct move *mv);
 int getScore (gm *newGame, bool is_max);
 uint8_t emptyRow (size_t pos, Boardst boardStats[]);

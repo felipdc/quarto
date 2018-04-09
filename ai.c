@@ -19,6 +19,7 @@
 #include "board.h"
 #include "play.h"
 #include "ai.h"
+#include "options.h"
 
 
 char *binaryoption[] = {"0000", "0001", "0010", "0011", "0100",
@@ -155,12 +156,26 @@ int chooseAiMove (gm *newGame) {
 
 
 void moveUsingHeuristic (gm *newGame) {
-	//printf("pos = %d\n", chooseAiMove(newGame));
-	//printf("piec = %d\n", chooseAiNextPiece(newGame));
-	size_t aiMove = chooseAiMove(newGame);
+	size_t aiMove = 0;
+	size_t aiNextP = 0;
+	// Check if AI has to do the first move
+	if (g_first_play == true) {
+		g_first_play = false;
+		aiNextP = chooseAiNextPiece(newGame);
+		newGame->next_piece = aiNextP;
+		newGame->pieceStats[aiNextP] = used;
+		play1 (newGame);
+		return;
+	}
+	// Play using minimax when 60% of all positions are filled
+	if (getEmptyPositions(newGame) < 6) {
+		moveUsingMinimax (newGame);
+		return;
+	}
+	aiMove = chooseAiMove(newGame);
 	newGame->board[aiMove] = binaryoption[newGame->next_piece];
 	newGame->boardStats[aiMove] = filled;
-	size_t aiNextP = chooseAiNextPiece(newGame);
+	aiNextP = chooseAiNextPiece(newGame);
 	newGame->next_piece = aiNextP;
 	newGame->pieceStats[aiNextP] = used;
 	print_board(newGame);
@@ -175,7 +190,8 @@ void moveUsingHeuristic (gm *newGame) {
 /**
  *
  * 	AI will play using minimax algorithm when 60% of all position are used, i.e.,
- * when 6 positions are left on board.
+ * when 6 positions are left on board. By this way, we avoid intese computation
+ * power that could last days for the first moves.
  *
  */
 

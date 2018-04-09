@@ -18,6 +18,7 @@
 #include "play.h"
 #include "board.h"
 #include "ai.h"
+#include "options.h"	
 
 /**
  *	Range of options is from 0 to F, so it`s binary values can be
@@ -68,10 +69,15 @@ void play1 (gm *newGame) {
 	}
 	updateGame (move, next_p, newGame);
 	if (checkBoard (newGame) == true) {
-		printf("Player won the game ! \n");
+		printf ("Player won the game ! \n");
 		return;
 	}
-	moveUsingHeuristic(newGame);
+	if (g_flags[PLAYER_VS_AI] == true) {
+		moveUsingHeuristic(newGame);
+	}
+	else {
+		play1 (newGame);
+	}
 }
 
 
@@ -81,12 +87,14 @@ void updateGame (size_t move, size_t next_p, gm *newGame) {
 	newGame->boardStats[move] = filled;
 	newGame->next_piece = next_p;
 	newGame->pieceStats[next_p] = used;
-	if (newGame->player == player1) newGame->player = player2;
-	else newGame->player = player1;
+	if (g_flags[PLAYER_VS_AI] == false) {
+		if (newGame->player == player1) newGame->player = player2;
+		else newGame->player = player1;
+	}
 	print_board(newGame);
 	/** Check if the move is a winning move */
 	if (checkBoard (newGame)) {
-		printf("Game over! \nPlayer %d is the winner!\n", newGame->player + 1);
+		printf ("Game over! \nPlayer %d is the winner!\n", newGame->player + 1);
 		return;
 	}
 	return;
@@ -99,9 +107,13 @@ void firstPlay (gm *newGame) {
 	getchar();
 	newGame->next_piece = hexchar_touint (read_next_piece);
 	newGame->pieceStats[newGame->next_piece] = used;
-	//newGame->player = player2;
-	moveUsingHeuristic(newGame);
-	//moveUsingMinimax(newGame);
-	//play1(newGame);
+	print_board (newGame);
+	if (g_flags[PLAYER_VS_AI] == true) {
+		moveUsingHeuristic (newGame);
+	}
+	else {
+		newGame->player = player2;
+		play1 (newGame);
+	}
 }
 
