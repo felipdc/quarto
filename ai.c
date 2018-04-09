@@ -64,7 +64,7 @@ char *binaryoption[] = {"0000", "0001", "0010", "0011", "0100",
  					// Undo the changes and return piece
  					newGame->boardStats[i] = empty;
  					newGame->board[j] = "free";
- 					return i;
+ 					return i; // Return next piece
  				} else {
  					// Undo the changes
  					newGame->boardStats[i] = empty;
@@ -81,7 +81,7 @@ char *binaryoption[] = {"0000", "0001", "0010", "0011", "0100",
  	 */
  	 for (i = 0; i < 16; ++i) {
  	 	if (newGame->pieceStats[i] == unused) {
- 	 		return i;
+ 	 		return i; // Return next piece
  	 	}
  	 }
  }
