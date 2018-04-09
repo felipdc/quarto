@@ -110,4 +110,15 @@ bool checkBoard (gm *newGame) {
 		}
 	}
 	return false;
+}
+
+
+bool moveLeft (gm *newGame) {
+	int i = 0;
+	for (i = 0; i < 16; ++i) {
+		if (newGame->boardStats[i] == filled) {
+			return true;
+		}
+	}
+	return false;
 }	

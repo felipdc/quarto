@@ -20,9 +20,9 @@
 
 
 size_t hexchar_touint (char moveRead) {
-    char *ptr; /** Next character in moveRead after the numerical value **/
-    long ret = strtol (&moveRead, &ptr, 16);  /** Converts initial part of moveRead to a long int of base 16 **/
-    return (size_t)ret; /** Explicit cast not necessary but will be kept here **/
+    char *ptr; /** Next character in moveRead after the numerical value */
+    long ret = strtol (&moveRead, &ptr, 16);  /** Converts initial part of moveRead to a long int of base 16 */
+    return (size_t)ret; /** Explicit cast not necessary but will be kept here */
 }
 
 
