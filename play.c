@@ -17,6 +17,7 @@
 #include <string.h>
 #include "play.h"
 #include "board.h"
+#include "ai.h"
 
 /**
  *	Range of options is from 0 to F, so it`s binary values can be
@@ -49,11 +50,11 @@ size_t readFromUser () {
 	return (hexchar_touint (read_from_user));
 }
 
-/** Default play function */
+/** Default play for the player function */
 void play1 (gm *newGame) {
 	printf("Player %d: \n" 
-			"Choose a position for the piece %04lx\n", newGame->player,
-			 newGame->next_piece);
+			"Choose a position for the piece %s\n", newGame->player,
+			 binaryoptions[newGame->next_piece]);
 	size_t move = readFromUser ();
 	printf("Choose a piece for the next player\n");
 	size_t next_p = readFromUser ();
@@ -66,7 +67,11 @@ void play1 (gm *newGame) {
 		next_p = readFromUser ();
 	}
 	updateGame (move, next_p, newGame);
-	play1(newGame);
+	if (checkBoard (newGame) == true) {
+		printf("Player won the game ! \n");
+		return;
+	}
+	moveUsingHeuristic(newGame);
 }
 
 
@@ -94,6 +99,9 @@ void firstPlay (gm *newGame) {
 	getchar();
 	newGame->next_piece = hexchar_touint (read_next_piece);
 	newGame->pieceStats[newGame->next_piece] = used;
-	newGame->player = player2;
+	//newGame->player = player2;
+	moveUsingHeuristic(newGame);
+	//moveUsingMinimax(newGame);
+	//play1(newGame);
 }
 

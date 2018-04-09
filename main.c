@@ -32,7 +32,7 @@ int main (int argc, char *argv[]) {
     init_board (newGame); 
     print_board (newGame);
     firstPlay (newGame);
-    play1(newGame);
+    //play1(newGame);
     free (newGame);
     return 0;
 }

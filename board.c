@@ -75,7 +75,7 @@ bool checkBoard (gm *newGame) {
 			else if (newGame->board[0+j][i] == newGame->board[1+j][i] 
 					&& newGame->board[0+j][i] == newGame->board[2+j][i] 
 					&& newGame->board[1+j][i] == newGame->board[3+j][i]) {
-						printf("digit %d of line %d is equal\n", i, j);
+						//printf("digit %d of line %d is equal\n", i, j);
 						return true;
 			}
 		}
@@ -86,7 +86,7 @@ bool checkBoard (gm *newGame) {
 			else if (newGame->board[0+j][i] == newGame->board[4+j][i] 
 					&& newGame->board[0+j][i] == newGame->board[8+j][i] 
 					&& newGame->board[4+j][i] == newGame->board[12+j][i]) {
-						printf("digit %d of column %d is equal\n", i, j);
+						//printf("digit %d of column %d is equal\n", i, j);
 						return true;
 			}
 		}
@@ -96,7 +96,7 @@ bool checkBoard (gm *newGame) {
 		else if (newGame->board[0][i] == newGame->board[5][i] 
 				&& newGame->board[0][i] == newGame->board[10][i] 
 				&& newGame->board[5][i] == newGame->board[15][i]) {
-					printf("digit %d in the first diagonal is equal\n", i);
+					//printf("digit %d in the first diagonal is equal\n", i);
 					return true;
 		}
 	}
@@ -105,7 +105,7 @@ bool checkBoard (gm *newGame) {
 		else if (newGame->board[3][i] == newGame->board[6][i] 
 				&& newGame->board[3][i] == newGame->board[9][i] 
 				&& newGame->board[6][i] == newGame->board[12][i]) {
-					printf("digit %d in the second diagonal is equal\n", i);
+					//printf("digit %d in the second diagonal is equal\n", i);
 					return true;
 		}
 	}
@@ -116,9 +116,20 @@ bool checkBoard (gm *newGame) {
 bool moveLeft (gm *newGame) {
 	int i = 0;
 	for (i = 0; i < 16; ++i) {
-		if (newGame->boardStats[i] == filled) {
+		if (newGame->boardStats[i] == empty) {
 			return true;
 		}
 	}
 	return false;
-}	
+}
+
+
+int getEmptyPositions(gm *newGame) {
+	int i, counter = 0;
+	for (i = 0; i < 16; ++i) {
+		if (newGame->boardStats[i] == empty) {
+			++counter;
+		}
+	}
+	return counter;
+}

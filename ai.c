@@ -18,21 +18,8 @@
 #include <stdint.h>
 #include "board.h"
 #include "play.h"
+#include "ai.h"
 
- #define LOSS -10
- #define WIN 10
- #define DRAW 0
-
-struct move {
-	size_t move, next_piece;
-};
-
-int chooseAiNextPiece (gm *newGame);
-int chooseAiMove (gm *newGame);
-int minimax (bool is_max, gm *game_node, struct move *mv);
-int getScore (gm *newGame, bool is_max);
-uint8_t emptyRow (size_t pos, Boardst boardStats[]);
-uint8_t emptyColumn (size_t pos, Boardst boardStats[]);
 
 char *binaryoption[] = {"0000", "0001", "0010", "0011", "0100",
                                 "0101", "0110", "0111", "1000", "1001",
@@ -50,25 +37,34 @@ char *binaryoption[] = {"0000", "0001", "0010", "0011", "0100",
 
  int chooseAiNextPiece (gm *newGame) {
  	int i, j = 0;
+ 	int counter = 0;
  	// Iterate throught all unused pieces
  	for (i = 0; i < 16; ++i) {
  		if (newGame->pieceStats[i] == unused) {
- 			// Try this piece
- 			newGame->boardStats[i] = filled;
  			// Iterate throught all empty positions
  			for (j = 0; j < 16; ++j) {
- 				// Try this position
- 				newGame->board[j] = binaryoption[i];
- 				if (checkBoard(newGame) == false) {
- 					// Piece will not result in a winning position.
- 					// Undo the changes and return piece
- 					newGame->boardStats[i] = empty;
- 					newGame->board[j] = "free";
- 					return i; // Return next piece
- 				} else {
- 					// Undo the changes
- 					newGame->boardStats[i] = empty;
- 					newGame->board[j] = "free";
+ 				// Check if a position is empty
+ 				if (newGame->boardStats[j] == empty) {
+ 					// Try this position
+ 					newGame->board[j] = binaryoption[i];
+ 					newGame->boardStats[j] = filled;
+ 					if (checkBoard(newGame) == true) {
+ 					// Piece will result in a winning position for the player
+ 					// Undo the changes and try next piece
+ 						newGame->boardStats[j] = empty;
+ 						newGame->board[j] = "free";
+ 						break;
+ 					} 
+ 				 	else {
+ 						// Undo the changes
+ 						newGame->boardStats[j] = empty;
+ 						newGame->board[j] = "free";
+ 						++counter;
+ 						// Check if all positions were iterated
+ 						if (getEmptyPositions(newGame) == counter) {
+ 							return i;
+ 						}
+ 					}
  				}
  			}
  		}
@@ -88,12 +84,14 @@ char *binaryoption[] = {"0000", "0001", "0010", "0011", "0100",
 
 
 /** 
- *
- *	AI will play a board position which has the most
- * odd positions and the less even positions avaliable in 
- * colums and rows. Using this method, AI will increase the 
- * probability of being the last one to fill an empty
- * column or row, winning the game.
+ *	
+ *	AI will, in it`s first attempt, try to find winning positions.
+ * 
+ *	If there is no winning position, AI will play a board 
+ * position which has the most odd positions and the less 
+ * even positions avaliable in colums and rows. Using this
+ * method, AI will increase the probability of being the 
+ * last one to fill an empty column or row, winning the game.
  *
  *	AI will be playing using this function until the board
  * achieves a certain depht. Then, AI will use the minimax
@@ -107,6 +105,27 @@ int chooseAiMove (gm *newGame) {
 	int bestPos = -1;
 	// Iterate throught the board to find empty positions
 	for (i = 0; i < 16; ++i) {
+		// If position is empty
+		if (newGame->boardStats[i] == empty) {
+			// Try this position
+			newGame->board[i] = binaryoption[newGame->next_piece];
+			newGame->boardStats[i] = filled;
+			// If the position is a winning position, return
+			if (checkBoard (newGame) == true) {
+				// Undo changes
+				newGame->board[i] = "free";
+				newGame->boardStats[i] = empty;
+				// Return winning position
+				return i;
+			}
+			// Undo the changes anyway
+			newGame->board[i] = "free";
+			newGame->boardStats[i] = empty;
+		}
+	}
+
+	// Iterate throught the board to find empty positions
+	for (i = 0; i < 16; ++i) {
 		if (newGame->boardStats[i] == empty) {
 			emptyInColums = emptyColumn (i, newGame->boardStats);
 			emptyInRows = emptyRow (i, newGame->boardStats);
@@ -117,7 +136,7 @@ int chooseAiMove (gm *newGame) {
 				}
 			}
 		}
-	}
+	}	
 	/** 
 	 * In case of no combination of odd empty column and row, the position
 	 * will be chosen by the first avaliable position on board.
@@ -134,12 +153,64 @@ int chooseAiMove (gm *newGame) {
 	}
 }
 
+
+void moveUsingHeuristic (gm *newGame) {
+	//printf("pos = %d\n", chooseAiMove(newGame));
+	//printf("piec = %d\n", chooseAiNextPiece(newGame));
+	size_t aiMove = chooseAiMove(newGame);
+	newGame->board[aiMove] = binaryoption[newGame->next_piece];
+	newGame->boardStats[aiMove] = filled;
+	size_t aiNextP = chooseAiNextPiece(newGame);
+	newGame->next_piece = aiNextP;
+	newGame->pieceStats[aiNextP] = used;
+	print_board(newGame);
+	if (checkBoard (newGame) == true) {
+		printf ("AI won the game ! \n");
+		return;
+	}
+	play1(newGame);
+}
+
+
 /**
  *
  * 	AI will play using minimax algorithm when 60% of all position are used, i.e.,
  * when 6 positions are left on board.
  *
  */
+
+int moveUsingMinimax (gm *newGame) {
+	int s = -999; // Score to get by calling minimax function
+	struct move *best_move;
+	best_move = malloc (sizeof(struct move));
+
+	best_move->move, best_move->next_piece = 0;
+	s = minimax (true, newGame, best_move);
+	//printf("imhere\n");
+	/** Make the move returned by minimax */
+	newGame->board[best_move->move] = binaryoption[newGame->next_piece];
+	newGame->boardStats[best_move->move] = filled;
+	newGame->next_piece = best_move->next_piece;
+	newGame->pieceStats[best_move->next_piece] = used;
+
+	/** Check score to see if game is won or lost */
+	s = getScore (newGame, true);
+	if (s == WIN) {
+		printf ("Game finished, AI won!\n");
+		return 0;
+	}
+	if (s == LOSS) {
+		printf ("Game finished, Player won!\n");
+		return 0;
+	}
+	if (s == DRAW && moveLeft(newGame) == false) {
+		printf ("Game draw!\n");
+		return 0;
+	}
+	print_board(newGame);
+	play1(newGame);
+}
+
 
 int minimax (bool is_max, gm *game_node, struct move *mv) {
 	int current_score = getScore (game_node, is_max);
@@ -152,7 +223,6 @@ int minimax (bool is_max, gm *game_node, struct move *mv) {
 	if (moveLeft (game_node) == false) {
 		return current_score;
 	}
-
 	int best_value;
 	int current_value = 0;
 	size_t last_piece = game_node->next_piece; // Will be used when undo changes is needed 
@@ -192,8 +262,8 @@ int minimax (bool is_max, gm *game_node, struct move *mv) {
 				}
 			}
 		}
+		return best_value;
 	}
-	return best_value;
 
 	if (!is_max) {
 		int best_value = 100;
