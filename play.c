@@ -87,15 +87,15 @@ void updateGame (size_t move, size_t next_p, gm *newGame) {
 	newGame->boardStats[move] = filled;
 	newGame->next_piece = next_p;
 	newGame->pieceStats[next_p] = used;
+	/** Check if the move is a winning move */
+	print_board(newGame);
+	if (checkBoard (newGame)) {
+		printf ("Game over! \nPlayer %d is the winner!\n", newGame->player);
+		return;
+	}
 	if (g_flags[PLAYER_VS_AI] == false) {
 		if (newGame->player == player1) newGame->player = player2;
 		else newGame->player = player1;
-	}
-	print_board(newGame);
-	/** Check if the move is a winning move */
-	if (checkBoard (newGame)) {
-		printf ("Game over! \nPlayer %d is the winner!\n", newGame->player + 1);
-		return;
 	}
 	return;
 }

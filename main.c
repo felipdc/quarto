@@ -64,7 +64,6 @@ int main (int argc, char *argv[]) {
     	}
     }else {
     	firstPlay (newGame);
-    	play1 (newGame);
     }
     free (newGame);
     return 0;
