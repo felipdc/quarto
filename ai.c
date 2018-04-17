@@ -168,7 +168,7 @@ void moveUsingHeuristic (gm *newGame) {
 		return;
 	}
 	// Play using minimax when 60% of all positions are filled
-	if (getEmptyPositions(newGame) < 6) {
+	if (getEmptyPositions(newGame) < 10 ) {
 		moveUsingMinimax (newGame);
 		return;
 	}
@@ -201,6 +201,7 @@ int moveUsingMinimax (gm *newGame) {
 	best_move = malloc (sizeof(struct move));
 
 	best_move->move, best_move->next_piece = 0;
+	printf("Thinking...\n");
 	s = minimax (true, newGame, best_move);
 	//printf("imhere\n");
 	/** Make the move returned by minimax */
@@ -232,7 +233,7 @@ int minimax (bool is_max, gm *game_node, struct move *mv) {
 	int current_score = getScore (game_node, is_max);
 
 	// If game is won or lost
-	if (current_score == 10 || current_score == -10) {
+	if (current_score == WIN || current_score == LOSS) {
 		return current_score;
 	}
 	// If game position is a draw
@@ -242,8 +243,9 @@ int minimax (bool is_max, gm *game_node, struct move *mv) {
 	int best_value;
 	int current_value = 0;
 	size_t last_piece = game_node->next_piece; // Will be used when undo changes is needed 
-	if (is_max) {
-		int best_value = -100;
+	if (is_max == true) {
+		best_value = -100;
+		printf("is_max");
 		// Iterate throught all avaliable positions
 		for (int i = 0; i < 16; ++i) {
 			if (game_node->boardStats[i] == empty) {
@@ -281,8 +283,9 @@ int minimax (bool is_max, gm *game_node, struct move *mv) {
 		return best_value;
 	}
 
-	if (!is_max) {
-		int best_value = 100;
+	if (is_max == false) {
+		best_value = 100;
+		printf("!ismax");
 		// Iterate throught all avaliable positions
 		for (int i = 0; i < 16; ++i) {
 			if (game_node->boardStats[i] == empty) {
