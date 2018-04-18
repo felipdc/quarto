@@ -34,5 +34,11 @@ Para inserir argumentos ao executar no Code:Blocks siga:
 ```
 Project > Set programs' arguments...
 ```
+É possível executar o programa com uma entrada de tesde. Para isso, basta utilizar:
+
+```
+./main -test
+```
+
 ## Autor
 Felipe Tiago De Carli - https://github.com/felipdc/
