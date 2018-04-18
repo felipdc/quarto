@@ -216,14 +216,17 @@ int moveUsingMinimax (gm *newGame) {
 	s = getScore (newGame, false);
 	if (s == WIN) {
 		printf ("Game finished, AI won!\n");
+		print_board (newGame);
 		return 0;
 	}
 	if (s == LOSS) {
 		printf ("Game finished, Player won!\n");
+		print_board (newGame);
 		return 0;
 	}
 	if (s == DRAW && moveLeft(newGame) == false) {
 		printf ("Game draw!\n");
+		print_board (newGame);
 		return 0;
 	}
 	print_board(newGame);
