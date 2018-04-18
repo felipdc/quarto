@@ -22,6 +22,7 @@
 #define HELP 0 // -help
 #define PLAYER_VS_AI 1 // -ai
 #define AI_BEGINS 2 // -aib
+#define TEST_GAME 3 // -test
 
 bool g_flags[16];
 

@@ -46,6 +46,44 @@ bool set_flags (int argc, char *argv[]) {
 		}
 		return true;
 	}
+
+    if (argc > 1 && strcmp (argv[1], "-test") == 0) {
+        g_flags[TEST_GAME] = true;
+        return true;
+    }
+}
+
+
+// Great game to AI think about
+
+void setTestBoard (gm *newGame) {
+    newGame->board[0] = "0000";
+    newGame->boardStats[0] = filled;
+    newGame->pieceStats[0] = used;
+
+    newGame->board[1] = "0001";
+    newGame->boardStats[1] = filled;
+    newGame->pieceStats[1] = used;
+
+    newGame->board[4] = "0010";
+    newGame->boardStats[4] = filled;
+    newGame->pieceStats[2] = used;
+
+    newGame->board[5] = "1111";
+    newGame->boardStats[5] = filled;
+    newGame->pieceStats[15] = used;
+
+    newGame->board[14] = "1100";
+    newGame->boardStats[14] = filled;
+    newGame->pieceStats[12] = used;
+
+    newGame->board[11] = "1010";
+    newGame->boardStats[11] = filled;
+    newGame->pieceStats[10] = used;
+
+    newGame->pieceStats[3] = used;
+    newGame->next_piece = 3;
+
 }
 
 
@@ -62,8 +100,19 @@ int main (int argc, char *argv[]) {
     	}else {
     		firstPlay (newGame);
     	}
-    }else {
+    }
+    else if (g_flags[TEST_GAME] == true) {
+        g_flags[PLAYER_VS_AI] = true;
+        setTestBoard (newGame);
+        print_board (newGame);
+        moveUsingHeuristic (newGame);
+        free (newGame);
+        return 0;
+    }
+    else {
     	firstPlay (newGame);
+        free (newGame);
+        return 0;
     }
     free (newGame);
     return 0;
