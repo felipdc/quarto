@@ -34,7 +34,7 @@ Para inserir argumentos ao executar no Code:Blocks siga:
 ```
 Project > Set programs' arguments...
 ```
-É possível executar o programa com uma entrada de desde. Para isso, basta utilizar:
+É possível executar o programa com uma entrada de tesde. Para isso, basta utilizar:
 
 ```
 ./main -test
